@@ -11,6 +11,9 @@
   --accent-text: #ffffff;
   --positive: #1f7a4d;
   --negative: #c2412d;
+  --series-1: #257de0;
+  --series-2: #f47230;
+  --grid: #e8e6df;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -25,6 +28,9 @@
     --accent-text: #0d1a12;
     --positive: #5fd39a;
     --negative: #ff7a63;
+    --series-1: #338ced;
+    --series-2: #e76624;
+    --grid: #2a2f2a;
   }
 }
 

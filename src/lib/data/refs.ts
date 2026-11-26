@@ -5,8 +5,16 @@ export type Category = { id: string; scope: "business" | "personal"; kind: "inco
 
 export async function getStores(): Promise<Store[]> {
   const sb = await createServerClient();
-  const { data, error } = await sb.from("stores").select("id,name,sort_order").order("sort_order");
+  const load = () => sb.from("stores").select("id,name,sort_order").order("sort_order");
+  let { data, error } = await load();
   if (error) throw error;
+  if (!data?.length) {
+    // Первый вход мог пройти до настройки базы — создаём магазины и категории сейчас.
+    const seeded = await sb.rpc("seed_defaults");
+    if (seeded.error) throw seeded.error;
+    ({ data, error } = await load());
+    if (error) throw error;
+  }
   return (data ?? []).map((s) => ({ id: s.id, name: s.name, sortOrder: s.sort_order }));
 }
 

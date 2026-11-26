@@ -96,6 +96,12 @@ create index on public.purchases (user_id, date);
 create index on public.owner_draws (user_id, date);
 create index on public.personal_txns (user_id, date);
 
+-- Доступ к таблицам для вошедших пользователей (новые проекты Supabase не выдают его автоматически).
+-- Какие именно строки видны — решает RLS ниже.
+grant usage on schema public to authenticated;
+grant select, insert, update, delete on all tables in schema public to authenticated;
+alter default privileges in schema public grant select, insert, update, delete on tables to authenticated;
+
 -- RLS: каждый видит и меняет только свои строки
 do $$
 declare t text;

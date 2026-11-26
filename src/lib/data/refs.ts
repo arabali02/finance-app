@@ -21,6 +21,7 @@ export async function getCategories(scope?: Category["scope"]): Promise<Category
 
 export async function getTaxRate(): Promise<number> {
   const sb = await createServerClient();
-  const { data } = await sb.from("settings").select("tax_rate").maybeSingle();
+  const { data, error } = await sb.from("settings").select("tax_rate").maybeSingle();
+  if (error) throw error;
   return data ? Number(data.tax_rate) : 0.02;
 }

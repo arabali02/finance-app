@@ -83,34 +83,13 @@ async function saveDraw(
   sb: Sb,
   d: { id: string | null; storeId: string | null; date: string; amount: number; note: string | null },
 ): Promise<string | null> {
-  const { data: cat } = await sb
-    .from("categories")
-    .select("id")
-    .eq("scope", "personal")
-    .eq("kind", "income")
-    .eq("name", "Из бизнеса")
-    .maybeSingle();
-  if (!cat) return "Нет личной категории «Из бизнеса» — добавьте её в настройках";
-
-  const personal = { date: d.date, kind: "income", category_id: cat.id, amount: d.amount, note: d.note ?? "Вывод из бизнеса" };
-
-  if (d.id) {
-    const { data: draw, error } = await sb.from("owner_draws").select("personal_txn_id").eq("id", d.id).single();
-    if (error) return "Не удалось сохранить";
-    const up = await sb.from("owner_draws").update({ store_id: d.storeId, date: d.date, amount: d.amount, note: d.note }).eq("id", d.id);
-    if (up.error) return "Не удалось сохранить";
-    if (draw.personal_txn_id) await sb.from("personal_txns").update(personal).eq("id", draw.personal_txn_id);
-    return null;
-  }
-
-  const { data: txn, error: e1 } = await sb.from("personal_txns").insert(personal).select("id").single();
-  if (e1) return "Не удалось сохранить";
-  const { error: e2 } = await sb
-    .from("owner_draws")
-    .insert({ store_id: d.storeId, date: d.date, amount: d.amount, note: d.note, personal_txn_id: txn.id });
-  if (e2) {
-    await sb.from("personal_txns").delete().eq("id", txn.id);
-    return "Не удалось сохранить";
-  }
-  return null;
+  const { error } = await sb.rpc("save_owner_draw", {
+    p_id: d.id,
+    p_store: d.storeId,
+    p_date: d.date,
+    p_amount: d.amount,
+    p_note: d.note,
+  });
+  if (!error) return null;
+  return error.code === "P0002" ? error.message : "Не удалось сохранить";
 }

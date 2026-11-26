@@ -1,13 +1,15 @@
 "use client";
 
+import { useSubmit } from "@/lib/ui/useSubmit";
 import { useActionState, useEffect, useRef, useTransition } from "react";
 import { addCategory, deleteCategory, renameCategory, saveTaxRate, type SettingsState } from "./actions";
 import type { Category } from "@/lib/data/refs";
 
 export function TaxForm({ percent }: { percent: number }) {
   const [state, action, pending] = useActionState<SettingsState, FormData>(saveTaxRate, {});
+  const submit = useSubmit(action);
   return (
-    <form action={action} className="card space-y-3">
+    <form onSubmit={submit} className="card space-y-3">
       <h2 className="font-semibold">Налог (упрощёнка)</h2>
       <div className="flex items-center gap-2">
         <input name="tax_percent" inputMode="decimal" defaultValue={String(percent)} className="field w-24" aria-label="Ставка налога, %" />
@@ -58,6 +60,7 @@ function CategoryRow({ c }: { c: Category }) {
 
 export function CategoriesForm({ categories }: { categories: Category[] }) {
   const [state, action, pending] = useActionState<SettingsState, FormData>(addCategory, {});
+  const submit = useSubmit(action);
   const ref = useRef<HTMLFormElement>(null);
   useEffect(() => {
     if (state.ok) ref.current?.reset();
@@ -75,7 +78,7 @@ export function CategoriesForm({ categories }: { categories: Category[] }) {
           </div>
         );
       })}
-      <form ref={ref} action={action} className="space-y-2 border-t border-border pt-3">
+      <form ref={ref} onSubmit={submit} className="space-y-2 border-t border-border pt-3">
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
           <select name="group" className="field" aria-label="Раздел">
             {GROUPS.map((g) => <option key={g.key} value={g.key}>{g.label}</option>)}

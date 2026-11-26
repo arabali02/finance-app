@@ -1,5 +1,6 @@
 "use client";
 
+import { useSubmit } from "@/lib/ui/useSubmit";
 import { useActionState, useEffect, useRef, useTransition } from "react";
 import { createGoal, deleteGoal, topUpGoal, type GoalState } from "./actions";
 
@@ -13,9 +14,10 @@ function useResetOnOk(ok?: number) {
 
 export function NewGoalForm() {
   const [state, action, pending] = useActionState<GoalState, FormData>(createGoal, {});
+  const submit = useSubmit(action);
   const ref = useResetOnOk(state.ok);
   return (
-    <form ref={ref} action={action} className="card space-y-3">
+    <form ref={ref} onSubmit={submit} className="card space-y-3">
       <h2 className="font-semibold">Новая цель</h2>
       <input name="name" placeholder="Например: отдельное здание" className="field" aria-label="Название" />
       <input name="target" inputMode="numeric" placeholder="Сумма цели, ₸" className="field" aria-label="Сумма цели" />
@@ -27,10 +29,11 @@ export function NewGoalForm() {
 
 export function TopUpForm({ id }: { id: string }) {
   const [state, action, pending] = useActionState<GoalState, FormData>(topUpGoal, {});
+  const submit = useSubmit(action);
   const ref = useResetOnOk(state.ok);
   const [delPending, start] = useTransition();
   return (
-    <form ref={ref} action={action} className="space-y-1">
+    <form ref={ref} onSubmit={submit} className="space-y-1">
       <input type="hidden" name="id" value={id} />
       <div className="flex gap-2">
         <input name="amount" inputMode="numeric" placeholder="Пополнить, ₸" className="field py-2" aria-label="Сумма пополнения" />

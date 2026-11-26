@@ -1,11 +1,13 @@
 "use client";
 
+import { useSubmit } from "@/lib/ui/useSubmit";
 import { useActionState, useEffect, useRef, useState, useTransition } from "react";
 import { addPersonal, deletePersonal, type PersonalState } from "./actions";
 import type { Category } from "@/lib/data/refs";
 
 export function PersonalForm({ categories, today }: { categories: Category[]; today: string }) {
   const [state, action, pending] = useActionState<PersonalState, FormData>(addPersonal, {});
+  const submit = useSubmit(action);
   const [kind, setKind] = useState<"expense" | "income">("expense");
   const list = categories.filter((c) => c.kind === kind);
   const [cat, setCat] = useState("");
@@ -18,7 +20,7 @@ export function PersonalForm({ categories, today }: { categories: Category[]; to
     `rounded-full border px-3 py-1.5 text-sm ${active ? "border-accent bg-accent text-accent-text font-semibold" : "border-border bg-surface"}`;
 
   return (
-    <form ref={formRef} action={action} className="card space-y-3">
+    <form ref={formRef} onSubmit={submit} className="card space-y-3">
       <input type="hidden" name="kind" value={kind} />
       <input type="hidden" name="category_id" value={catValue} />
       <div className="flex gap-2">

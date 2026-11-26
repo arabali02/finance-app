@@ -1,5 +1,6 @@
 "use client";
 
+import { useSubmit } from "@/lib/ui/useSubmit";
 import { useActionState, useState } from "react";
 import { saveEntry, type EntryState, type EntryType } from "./actions";
 import { formatTenge } from "@/lib/finance/format";
@@ -88,6 +89,7 @@ function Chips<T extends string>({ name, options, value, onChange }: {
 
 export function EntryForm({ stores, categories, initial }: { stores: Store[]; categories: Category[]; initial: EntryInitial }) {
   const [state, action, pending] = useActionState<EntryState, FormData>(saveEntry, {});
+  const submit = useSubmit(action);
   const [type, setType] = useState<EntryType>(initial.type);
   const allowShared = type === "expense" || type === "draw";
   const [store, setStore] = useState<string>(initial.storeId ?? stores[0]?.id ?? "");
@@ -104,7 +106,7 @@ export function EntryForm({ stores, categories, initial }: { stores: Store[]; ca
   ];
 
   return (
-    <form action={action} className="space-y-5">
+    <form onSubmit={submit} className="space-y-5">
       {initial.id && <input type="hidden" name="id" value={initial.id} />}
       {editing ? <input type="hidden" name="type" value={type} /> : <Chips name="type" options={TYPES} value={type} onChange={setType} />}
 

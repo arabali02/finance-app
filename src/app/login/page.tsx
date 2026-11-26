@@ -1,13 +1,15 @@
 "use client";
 
+import { useSubmit } from "@/lib/ui/useSubmit";
 import { useActionState } from "react";
 import { signIn, type LoginState } from "./actions";
 
 export default function LoginPage() {
   const [state, action, pending] = useActionState<LoginState, FormData>(signIn, {});
+  const submit = useSubmit(action);
   return (
     <main className="min-h-dvh flex items-center justify-center px-4">
-      <form action={action} className="w-full max-w-sm bg-surface border border-border rounded-2xl p-6 space-y-4">
+      <form onSubmit={submit} className="w-full max-w-sm bg-surface border border-border rounded-2xl p-6 space-y-4">
         <div>
           <h1 className="text-2xl font-bold">Касса</h1>
           <p className="text-muted text-sm">Учёт KEMEL и JARYQ</p>

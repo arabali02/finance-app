@@ -10,10 +10,8 @@ export async function deleteOperation(type: OpType, id: string): Promise<{ error
   if (!TABLE[type]) return { error: "Неизвестный тип" };
   const sb = await createServerClient();
   if (type === "draw") {
-    const { data } = await sb.from("owner_draws").select("personal_txn_id").eq("id", id).maybeSingle();
-    const { error } = await sb.from("owner_draws").delete().eq("id", id);
+    const { error } = await sb.rpc("delete_owner_draw", { p_id: id });
     if (error) return { error: "Не удалось удалить" };
-    if (data?.personal_txn_id) await sb.from("personal_txns").delete().eq("id", data.personal_txn_id);
   } else {
     const { error } = await sb.from(TABLE[type]).delete().eq("id", id);
     if (error) return { error: "Не удалось удалить" };

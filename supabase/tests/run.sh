@@ -10,5 +10,7 @@ trap 'su postgres -c "$BIN/pg_ctl -D $TMP/data -m fast stop >/dev/null"; rm -rf 
 P="psql -h $TMP -p 54329 -U postgres -q -v ON_ERROR_STOP=1"
 $P -f "$DIR/tests/stub_auth.sql"
 $P -f "$DIR/migrations/0001_init.sql"
+$P -f "$DIR/migrations/0002_products_import.sql"
 $P -f "$DIR/tests/rls_test.sql"
 $P -f "$DIR/tests/fix_test.sql"
+$P -f "$DIR/tests/products_test.sql"

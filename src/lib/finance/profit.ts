@@ -13,7 +13,7 @@ export function computeProfit(input: {
   for (const sale of input.sales) {
     const a = acc.get(sale.storeId);
     if (!a) continue;
-    a.revenue += sale.kaspi + sale.cash + sale.terminal;
+    a.revenue += sale.kaspi + sale.cash + sale.terminal + (sale.mixed ?? 0);
     a.cogs += sale.cogs;
   }
 

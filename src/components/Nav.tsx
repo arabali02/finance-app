@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 const items = [
   { href: "/", label: "Главная", icon: "M3 11l9-8 9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z" },
   { href: "/operations", label: "Операции", icon: "M4 6h16M4 12h16M4 18h10" },
+  { href: "/products", label: "Товары", icon: "M21 8l-9-5-9 5 9 5 9-5zM3 8v8l9 5 9-5V8M12 13v8" },
   { href: "/reports", label: "Отчёты", icon: "M4 20V10M10 20V4M16 20v-7M22 20H2" },
   { href: "/personal", label: "Личное", icon: "M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm-8 9a8 8 0 0 1 16 0" },
   { href: "/goals", label: "Цели", icon: "M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zm0-5a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0-4a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" },
@@ -44,12 +45,12 @@ export function Nav() {
           + Добавить
         </Link>
       </aside>
-      <nav className="md:hidden fixed bottom-0 inset-x-0 z-20 grid grid-cols-6 border-t border-border bg-surface pb-[env(safe-area-inset-bottom)]">
+      <nav className="md:hidden fixed bottom-0 inset-x-0 z-20 grid grid-cols-7 border-t border-border bg-surface pb-[env(safe-area-inset-bottom)]">
         {items.map((it) => (
           <Link
             key={it.href}
             href={it.href}
-            className={`flex flex-col items-center gap-0.5 py-2 text-[10px] ${active(it.href) ? "text-accent font-semibold" : "text-muted"}`}
+            className={`flex flex-col items-center gap-0.5 py-2 text-[9px] ${active(it.href) ? "text-accent font-semibold" : "text-muted"}`}
           >
             <Icon d={it.icon} />
             {it.label}

@@ -36,8 +36,15 @@ export default async function OperationsPage({ searchParams }: { searchParams: P
   let rows: Row[] = [
     ...(sales.data ?? []).map((r) => ({
       type: "sale" as const, id: r.id, date: r.date, storeId: r.store_id, title: "Итог дня",
-      amount: Number(r.kaspi) + Number(r.cash) + Number(r.terminal),
-      detail: `Kaspi ${formatTenge(Number(r.kaspi))} · нал ${formatTenge(Number(r.cash))} · терм ${formatTenge(Number(r.terminal))} · закуп ${formatTenge(Number(r.cogs))}`,
+      amount: Number(r.kaspi) + Number(r.cash) + Number(r.terminal) + Number(r.mixed ?? 0),
+      detail: [
+        `Kaspi ${formatTenge(Number(r.kaspi))}`,
+        `нал ${formatTenge(Number(r.cash))}`,
+        Number(r.terminal) ? `терм ${formatTenge(Number(r.terminal))}` : "",
+        Number(r.mixed) ? `смеш ${formatTenge(Number(r.mixed))}` : "",
+        `закуп ${formatTenge(Number(r.cogs))}`,
+        r.source === "import" ? "из кассы" : "",
+      ].filter(Boolean).join(" · "),
     })),
     ...(exps.data ?? []).map((r) => ({ type: "expense" as const, id: r.id, date: r.date, storeId: r.store_id, title: catName(r.category_id), amount: -Number(r.amount), detail: r.note ?? undefined })),
     ...(purs.data ?? []).map((r) => ({ type: "purchase" as const, id: r.id, date: r.date, storeId: r.store_id, title: "Закупка товара", amount: -Number(r.amount), detail: r.note ?? undefined })),

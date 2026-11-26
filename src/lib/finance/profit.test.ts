@@ -43,6 +43,18 @@ describe("computeProfit", () => {
   });
 });
 
+describe("смешанная оплата", () => {
+  it("входит в выручку", () => {
+    const r = computeProfit({
+      stores,
+      sales: [{ storeId: "A", date: "2026-11-26", kaspi: 100, cash: 50, terminal: 0, mixed: 30, cogs: 0 }],
+      expenses: [],
+      taxRate: 0,
+    });
+    expect(r.total.revenue).toBe(180);
+  });
+});
+
 describe("expensesByCategory", () => {
   it("суммирует по категориям", () => {
     expect(

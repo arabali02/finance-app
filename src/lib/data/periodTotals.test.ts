@@ -11,7 +11,7 @@ it("превращает итоги из базы в данные для рас�
     },
     "2026-11-01",
   );
-  expect(r.sales).toEqual([{ storeId: "A", date: "2026-11-01", kaspi: 100000, cash: 50000, terminal: 0, cogs: 60000 }]);
+  expect(r.sales).toEqual([{ storeId: "A", date: "2026-11-01", kaspi: 100000, cash: 50000, terminal: 0, mixed: 0, cogs: 60000 }]);
   expect(r.expenses).toEqual([{ storeId: null, date: "2026-11-01", categoryId: "ads", amount: 10001 }]);
   expect(r.purchasesTotal).toBe(7000);
   expect(r.drawsTotal).toBe(3000);

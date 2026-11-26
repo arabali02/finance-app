@@ -2,7 +2,7 @@ import type { DaySale, Expense } from "@/lib/finance/types";
 
 type Num = number | string;
 export type PeriodTotalsJson = {
-  sales: { store_id: string; kaspi: Num; cash: Num; terminal: Num; cogs: Num }[];
+  sales: { store_id: string; kaspi: Num; cash: Num; terminal: Num; mixed?: Num; cogs: Num }[];
   expenses: { store_id: string | null; category_id: string; amount: Num }[];
   purchases: Num;
   draws: Num;
@@ -16,6 +16,7 @@ export function mapPeriodTotals(j: PeriodTotalsJson, from: string) {
     kaspi: Number(s.kaspi),
     cash: Number(s.cash),
     terminal: Number(s.terminal),
+    mixed: Number(s.mixed ?? 0),
     cogs: Number(s.cogs),
   }));
   const expenses: Expense[] = j.expenses.map((e) => ({

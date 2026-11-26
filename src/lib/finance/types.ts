@@ -6,6 +6,8 @@ export type DaySale = {
   kaspi: number;
   cash: number;
   terminal: number;
+  /** смешанная оплата (наличные + Kaspi одной продажей), из отчётов кассы */
+  mixed?: number;
   cogs: number;
 };
 
